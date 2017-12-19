@@ -1,0 +1,17 @@
+{
+  "name": "intercontinental",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^1.13.3",
+    "pg": "^7.4.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.8.0"
+  }
+}
