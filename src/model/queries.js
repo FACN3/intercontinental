@@ -7,8 +7,8 @@ const addUser = (username, password) => {
       [username, password]
     )
     .then(idArray => {
-      console.log('idArray.rows is ,'idArray.rows);
-      console.log('idArray is ,'idArray);
+      console.log("idArray.rows is" ,idArray.rows);
+      console.log("idArray is" ,idArray);
       return idArray[0]
     })
     .catch(err => console.log('error in addUser ', err));
@@ -21,6 +21,7 @@ const loginUser = (username, password) => {
       [username, password]
     )
     .then(idArray => {
+      console.log("idArray is: ",idArray);
       if (idArray[0]) {
         return idArray[0];
       } else {
@@ -30,3 +31,4 @@ const loginUser = (username, password) => {
 };
 
 //todo add comment query, get comment query
+module.exports = {addUser, loginUser };
