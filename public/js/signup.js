@@ -16,6 +16,7 @@ function fetchGET(url, callback) {
 }
 
 function fetchPOST(url, data, callback) {
+  console.log('111', data)
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4 && xhr.status !== 200) {
@@ -25,25 +26,28 @@ function fetchPOST(url, data, callback) {
     }
   };
   xhr.open('POST', url);
-  xhr.send(data);
+  xhr.send(JSON.stringify(data));
 }
 
 document.querySelector('.signIn').addEventListener('submit', function(e) {
   e.preventDefault();
-  var data = [];
+  var data = {};
   var username = document.getElementById('usernameSignIn').value;
   var pass = document.getElementById('passwordSignIn').value;
-  data.push(username, pass);
+  data.username = username;
+  data.pass = pass;
 
   fetchPOST('/login', data, function(err, res) {
     if (err) {
       console.log(err);
-    } else if (res === 'Username does not exist' || res === 'Wrong Password') {
+    } /*else if (res === 'Username does not exist' || res === 'Wrong Password') {
       document.querySelector('#signInRules').textContent =
         'Invalid Username / Password';
-    } else {
-      console.log(res);
-      window.location.href = '../buy.html';
+    }*/ 
+    else {
+      console.log('in else of fetchpost login');
+      console.log(res)
+      window.location.href = '/';
     }
   });
 });
