@@ -17,7 +17,7 @@ const addUser = (username, password) => {
 const loginUser = (username, password) => {
   connect
     .query(
-      `SELECT username,password FROM users WHERE username=$1 AND password=$2`,
+      `SELECT id,username FROM users WHERE username=$1 AND password=$2`,
       [username, password]
     )
     .then(idArray => {
