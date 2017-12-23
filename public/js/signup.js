@@ -16,16 +16,19 @@ function fetchGET(url, callback) {
 }
 
 function fetchPOST(url, data, callback) {
-  console.log('111', data)
+  console.log('111', data);
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
+    console.log(xhr.readyState);
     if (xhr.readyState == 4 && xhr.status !== 200) {
       callback(xhr.responseText);
     } else if (xhr.readyState == 4 && xhr.status === 200) {
-      callback(null, xhr.responseText);
+      console.log('responseText is ', xhr.responseText);
+      callback(null, JSON.parse(xhr.responseText));
     }
   };
-  xhr.open('POST', url);
+  xhr.open('POST', url, false);
+  xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify(data));
 }
 
@@ -36,20 +39,36 @@ document.querySelector('.signIn').addEventListener('submit', function(e) {
   var pass = document.getElementById('passwordSignIn').value;
   data.username = username;
   data.pass = pass;
-
+  //
   fetchPOST('/login', data, function(err, res) {
     if (err) {
       console.log(err);
-    } /*else if (res === 'Username does not exist' || res === 'Wrong Password') {
+    } else {
+      /*else if (res === 'Username does not exist' || res === 'Wrong Password') {
       document.querySelector('#signInRules').textContent =
         'Invalid Username / Password';
-    }*/ 
-    else {
+    }*/
+
       console.log('in else of fetchpost login');
-      console.log(res)
+      console.log(res);
       window.location.href = '/';
     }
   });
+  //
+  // fetch('/login', {
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json'
+  //   },
+  //   method: 'POST',
+  //   body: JSON.stringify(data)
+  // })
+  //   .then(function(res) {
+  //     console.log(res);
+  //   })
+  //   .catch(function(res) {
+  //     console.log(res);
+  //   });
 });
 
 document.querySelector('.signUp').addEventListener('submit', function(e) {
