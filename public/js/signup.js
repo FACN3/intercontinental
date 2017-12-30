@@ -16,15 +16,15 @@ function fetchGET(url, callback) {
 }
 
 function fetchPOST(url, data, callback) {
+  console.log('111', data);
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     console.log(xhr.readyState);
     if (xhr.readyState == 4 && xhr.status !== 200) {
-      console.log('xhr.status!=200');
       callback(xhr.responseText);
     } else if (xhr.readyState == 4 && xhr.status === 200) {
       console.log('responseText is ', xhr.responseText);
-      callback(null, xhr.responseText);
+      callback(null, JSON.parse(xhr.responseText));
     }
   };
   xhr.open('POST', url, false);
@@ -40,50 +40,35 @@ document.querySelector('.signIn').addEventListener('submit', function(e) {
   data.username = username;
   data.pass = pass;
   //
-  // fetchPOST('/login', data, function(err, res) {
-  //   console.log('data is ', data);
-  //   if (err) {
-  //     console.log('in error');
-  //     console.log(err);
-  //   } else {
-  //     /*else if (res === 'Username does not exist' || res === 'Wrong Password') {
-  //     document.querySelector('#signInRules').textContent =
-  //       'Invalid Username / Password';
-  //   }*/
-  //
-  //     console.log('in res of callback of fetchpost login');
-  //     console.log(res);
-  //     // window.location.href = '/';
-  //   }
-  // });
+  fetchPOST('/login', data, function(err, res) {
+    if (err) {
+      console.log(err);
+    } else {
+      /*else if (res === 'Username does not exist' || res === 'Wrong Password') {
+      document.querySelector('#signInRules').textContent =
+        'Invalid Username / Password';
+    }*/
 
-  fetch('/login', {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(data)
-    // console.log('hello');
-  })
-    .then(function(res) {
-      // console.log(res);
-      return res.json();
-    })
-    .then(function(data) {
-      document.querySelector('#signInRules').textContent = '';
-      console.log(data);
-      if (data == 'login successful') {
-        window.location.href = '/auth/continents';
-      } else if (data == 'incorrect user/pass combo') {
-        document.querySelector('#signInRules').textContent =
-          'incorrect username/password';
-      }
-    })
-    .catch(function(res) {
-      return console.log('catch');
-    });
+      console.log('in else of fetchpost login');
+      console.log(res);
+      window.location.href = '/';
+    }
+  });
+  //
+  // fetch('/login', {
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json'
+  //   },
+  //   method: 'POST',
+  //   body: JSON.stringify(data)
+  // })
+  //   .then(function(res) {
+  //     console.log(res);
+  //   })
+  //   .catch(function(res) {
+  //     console.log(res);
+  //   });
 });
 
 document.querySelector('.signUp').addEventListener('submit', function(e) {
@@ -106,21 +91,17 @@ document.querySelector('.signUp').addEventListener('submit', function(e) {
       document.querySelector('#rules').textContent =
         'Username should be at least 6 characters.';
     } else {
-      var data = {};
-      data.username = user;
-      data.pass = pass;
+      var query = 'user=' + user + '&pass=' + pass;
 
-      fetchPOST('/signup', data, function(err, res) {
-        console.log('query is', data);
+      fetchPOST('/createuser', query, function(err, res) {
         if (err) {
           console.log('error with', err);
         } else if (res === JSON.stringify('username already exists')) {
           document.querySelector('#rules').textContent =
             'username already exists';
         } else if (res === JSON.stringify('login successful')) {
-          window.location.href = '/auth/continents';
-        } else {
-          console.log('no other else if statments match');
+          alert('Thank you for signing up! You receive a 500$ certificate :)');
+          window.location.href = '../buy.html';
         }
       });
     }
